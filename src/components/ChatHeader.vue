@@ -12,7 +12,7 @@ export default defineComponent({
   props: {
     title: {
       type: String,
-      default: 'Chat Room'
+      default: 'sk-chat-v2'
     }
   }
 })
