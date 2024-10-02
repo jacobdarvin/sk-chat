@@ -7,12 +7,12 @@
           v-model="username"
           type="text"
           placeholder="Enter your username"
-          class="w-full px-4 py-2 text-black border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+          class="w-full px-4 py-2 text-black border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
           required
         />
         <button
           type="submit"
-          class="w-full py-2 text-white bg-black rounded-md hover:bg-gray-800 transition-colors"
+          class="w-full py-2 text-white bg-black rounded-md hover:bg-neutral-800 transition-colors"
         >
           Enter Chat
         </button>

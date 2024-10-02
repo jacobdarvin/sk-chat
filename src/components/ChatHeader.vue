@@ -1,5 +1,5 @@
 <template>
-  <header class="p-4 flex items-center border-b border-gray-300">
+  <header class="p-4 flex items-center border-b border-neutral-300">
     <h2 class="text-2xl">{{ title }}</h2>
   </header>
 </template>

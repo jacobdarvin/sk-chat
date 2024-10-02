@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-grow overflow-y-auto p-4 bg-gray-50">
+  <div class="flex-grow overflow-y-auto p-4 bg-neutral-50">
     <MessageBubble
       v-for="(message, index) in messages"
       :key="index"

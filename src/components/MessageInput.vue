@@ -1,11 +1,11 @@
 <template>
-  <div class="flex items-center p-4 bg-white border-t border-gray-300">
+  <div class="flex items-center p-4 bg-white border-t border-neutral-300">
     <input
       v-model="message"
       @keyup.enter="sendMessage"
       type="text"
       placeholder="Type your message..."
-      class="flex-grow px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+      class="flex-grow px-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
     />
     <button
       @click="sendMessage"
