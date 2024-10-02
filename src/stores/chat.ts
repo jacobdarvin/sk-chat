@@ -1,4 +1,4 @@
-// src/store/chat.ts
+// src/stores/chat.ts
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import { useUserStore } from './user';
@@ -34,33 +34,43 @@ export const useChatStore = defineStore('chat', () => {
 
     const setSelectedUser = (user: User) => {
         selectedUser.value = user;
-        // Optionally, fetch messages with the selected user
+        // Fetch messages with the selected user
         fetchMessages(user.id);
     };
 
     const selectedUserId = computed(() => selectedUser.value?.id || null);
 
     const fetchMessages = (userId?: number) => {
+        // Clear existing messages
+        messages.value = [];
+
         // Replace with API call to fetch messages
-        // For demonstration, we filter messages between the current user and the selected user
         if (userId) {
+            // Fetch messages with the selected user
             messages.value = [
                 // Sample messages
-                {
-                    sender: userStore.user?.name || 'Me',
-                    receiver: selectedUser.value?.name,
-                    content: 'Hello!',
-                    timestamp: new Date().toISOString(),
-                },
                 {
                     sender: selectedUser.value?.name || 'User',
                     receiver: userStore.user?.name || 'Me',
                     content: 'Hi there!',
                     timestamp: new Date().toISOString(),
                 },
+                {
+                    sender: userStore.user?.name || 'Me',
+                    receiver: selectedUser.value?.name,
+                    content: 'Hello!',
+                    timestamp: new Date().toISOString(),
+                },
             ];
         } else {
             // Fetch group chat messages
+            messages.value = [
+                {
+                    sender: 'System',
+                    content: 'Welcome to the group chat!',
+                    timestamp: new Date().toISOString(),
+                },
+            ];
         }
     };
 

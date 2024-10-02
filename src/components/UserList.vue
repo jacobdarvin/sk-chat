@@ -1,3 +1,4 @@
+<!-- src/components/UserList.vue -->
 <template>
   <div class="w-56 border-r border-gray-300">
     <h3 class="text-lg font-medium p-4">Online Users</h3>
@@ -7,7 +8,7 @@
         :key="user.id"
         :class="[
           'p-4 cursor-pointer',
-          user.id === selectedUserId ? 'bg-neutral-200 font-bold' : 'hover:bg-neutral-100'
+          user.id === selectedUserId ? 'bg-neutral-200 font-medium' : 'hover:bg-neutral-100'
         ]"
         @click="selectUser(user)"
       >
@@ -18,8 +19,8 @@
 </template>
 
 <script lang="ts">
-import { useChatStore } from '@/stores/chat'
 import { defineComponent, computed } from 'vue'
+import { useChatStore } from '@/stores/chat'
 
 export default defineComponent({
   name: 'UserList',
