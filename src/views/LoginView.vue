@@ -2,7 +2,7 @@
 
 <template>
   <div class="login-container">
-    <h1>Welcome to sk-chat</h1>
+    <span class="text-2xl">Welcome to sk-chat</span>
     <form @submit.prevent="login">
       <input v-model="username" type="text" placeholder="Username" required />
       <button type="submit">Enter Chat</button>
