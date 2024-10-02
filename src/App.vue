@@ -1,7 +1,13 @@
 <template lang="">
-  <div></div>
+  <div id="app">
+    <router-view />
+  </div>
 </template>
-<script>
-export default {}
+<script lang="ts">
+import { defineComponent } from 'vue'
+
+export default defineComponent({
+  name: 'App'
+})
 </script>
 <style lang=""></style>
