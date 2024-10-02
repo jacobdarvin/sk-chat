@@ -1,6 +1,6 @@
 <!-- src/components/ChatWindow.vue -->
 <template>
-  <div class="chat-window">
+  <div class="flex-grow overflow-y-auto p-4 bg-gray-50">
     <MessageBubble
       v-for="(message, index) in messages"
       :key="index"
@@ -36,6 +36,4 @@ export default defineComponent({
 })
 </script>
 
-<style scoped>
-/* Add your styles here */
-</style>
+<style scoped></style>

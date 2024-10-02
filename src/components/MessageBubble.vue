@@ -1,13 +1,23 @@
-<!-- src/components/MessageBubble.vue -->
 <template>
-  <div :class="['message-bubble', { mine: isMine }]">
-    <p class="sender">{{ message.sender }}</p>
-    <p class="content">{{ message.content }}</p>
+  <div
+    :class="[
+      'max-w-xs md:max-w-md p-3 my-2 rounded-lg flex flex-col',
+      isMine ? 'bg-black text-white ml-auto' : 'bg-gray-200 text-black mr-auto'
+    ]"
+    :style="{
+      borderTopRightRadius: isMine ? '0.75rem' : '1.5rem',
+      borderTopLeftRadius: isMine ? '1.5rem' : '0.75rem'
+    }"
+  >
+    <!-- Show sender only if it's not the current user's message -->
+    <p v-if="!isMine" class="text-xs font-semibold mb-1">{{ message.sender }}</p>
+    <p class="text-sm">{{ message.content }}</p>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
+import { defineComponent } from 'vue'
+import type { PropType } from 'vue'
 
 interface Message {
   sender: string
@@ -30,11 +40,4 @@ export default defineComponent({
 })
 </script>
 
-<style scoped>
-.message-bubble {
-  /* Add styles for message bubble */
-}
-.message-bubble.mine {
-  /* Add styles for your own messages */
-}
-</style>
+<style scoped></style>

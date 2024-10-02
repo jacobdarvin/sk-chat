@@ -1,13 +1,18 @@
-<!-- src/components/MessageInput.vue -->
 <template>
-  <div class="message-input">
+  <div class="flex items-center p-4 bg-white border-t border-gray-300">
     <input
       v-model="message"
       @keyup.enter="sendMessage"
       type="text"
       placeholder="Type your message..."
+      class="flex-grow px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
     />
-    <button @click="sendMessage">Send</button>
+    <button
+      @click="sendMessage"
+      class="ml-4 px-4 py-2 bg-black text-white rounded-lg hover:bg-neutral-800 transition-colors"
+    >
+      Send
+    </button>
   </div>
 </template>
 
@@ -33,6 +38,4 @@ export default defineComponent({
 })
 </script>
 
-<style scoped>
-/* Add your styles here */
-</style>
+<style scoped></style>

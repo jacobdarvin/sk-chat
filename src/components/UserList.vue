@@ -1,12 +1,14 @@
-<!-- src/components/UserList.vue -->
 <template>
-  <div class="user-list">
-    <h3>Online Users</h3>
-    <ul>
+  <div class="w-56 border-r border-gray-300">
+    <h3 class="text-lg font-medium p-4">Online Users</h3>
+    <ul class="list-none p-0 m-0">
       <li
         v-for="user in users"
         :key="user.id"
-        :class="{ active: user.id === selectedUserId }"
+        :class="[
+          'p-4 cursor-pointer',
+          user.id === selectedUserId ? 'bg-neutral-200 font-bold' : 'hover:bg-neutral-100'
+        ]"
         @click="selectUser(user)"
       >
         {{ user.name }}
@@ -46,35 +48,4 @@ export default defineComponent({
 })
 </script>
 
-<style scoped>
-.user-list {
-  width: 200px;
-  border-right: 1px solid #ccc;
-}
-
-.user-list h3 {
-  margin: 0;
-  padding: 16px;
-  background-color: #f5f5f5;
-}
-
-.user-list ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.user-list li {
-  padding: 12px 16px;
-  cursor: pointer;
-}
-
-.user-list li:hover {
-  background-color: #e9e9e9;
-}
-
-.user-list li.active {
-  background-color: #d9d9d9;
-  font-weight: bold;
-}
-</style>
+<style scoped></style>

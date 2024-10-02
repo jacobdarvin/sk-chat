@@ -1,11 +1,15 @@
-<!-- src/views/ChatView.vue -->
 <template>
-  <div class="chat-container">
+  <div class="flex flex-col min-h-screen bg-white">
+    <!-- Chat Header -->
     <ChatHeader />
-    <div class="chat-content">
+
+    <!-- Main Chat Content -->
+    <div class="flex flex-grow overflow-hidden">
       <UserList />
       <ChatWindow />
     </div>
+
+    <!-- Message Input -->
     <MessageInput />
   </div>
 </template>
@@ -29,5 +33,5 @@ export default defineComponent({
 </script>
 
 <style scoped>
-/* Add your styles here */
+/* Scoped styles if needed */
 </style>

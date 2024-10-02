@@ -1,7 +1,6 @@
-<!-- src/components/ChatHeader.vue -->
 <template>
-  <header class="chat-header">
-    <h2>{{ title }}</h2>
+  <header class="p-4 flex items-center border-b border-gray-300">
+    <h2 class="text-2xl">{{ title }}</h2>
   </header>
 </template>
 
@@ -19,6 +18,4 @@ export default defineComponent({
 })
 </script>
 
-<style scoped>
-/* Add your styles here */
-</style>
+<style scoped></style>
