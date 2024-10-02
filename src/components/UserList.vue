@@ -1,7 +1,10 @@
 <!-- src/components/UserList.vue -->
 <template>
   <div class="w-56 border-r border-gray-300">
-    <h3 class="text-lg font-medium p-4">Online Users</h3>
+    <h3 class="text-lg font-medium p-4 flex items-center">
+      <span class="inline-block w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+      Online Users ({{ users.length }})
+    </h3>
     <ul class="list-none p-0 m-0">
       <li
         v-for="user in users"
