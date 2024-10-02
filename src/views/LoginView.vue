@@ -1,8 +1,8 @@
 <!-- src/views/LoginView.vue -->
 
 <template>
-  <div class="login-container">
-    <span class="text-2xl">Welcome to sk-chat</span>
+  <div class="container">
+    <span class="text-3xl">Welcome to sk-chat</span>
     <form @submit.prevent="login">
       <input v-model="username" type="text" placeholder="Username" required />
       <button type="submit">Enter Chat</button>
