@@ -2,6 +2,7 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import { useUserStore } from './user';
+import api from '@/services/api';
 
 interface User {
     id: number;
@@ -23,19 +24,17 @@ export const useChatStore = defineStore('chat', () => {
 
     const userStore = useUserStore();
 
-    const fetchOnlineUsers = () => {
-        // Replace with API call to fetch online users
-        onlineUsers.value = [
-            { id: 1, username: 'Alice', email: 'alice@mail.com' },
-            { id: 2, username: 'Bob', email: 'bob@mail.com' },
-            { id: 3, username: 'Charlie', email: 'charlie@mail.com' },
-            // Add more users as needed
-        ];
+    const fetchOnlineUsers = async () => {
+        try {
+            const response = await api.getOnlineUsers()
+            onlineUsers.value = response.data.users;
+        } catch (error) {
+            console.error('Failed to fetch online users:', error)
+        }
     };
 
     const setSelectedUser = (user: User) => {
         selectedUser.value = user;
-        // Fetch messages with the selected user
         fetchMessages(user.id);
     };
 
