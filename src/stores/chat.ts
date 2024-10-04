@@ -5,7 +5,8 @@ import { useUserStore } from './user';
 
 interface User {
     id: number;
-    name: string;
+    username: string;
+    email: string;
 }
 
 interface Message {
@@ -25,9 +26,9 @@ export const useChatStore = defineStore('chat', () => {
     const fetchOnlineUsers = () => {
         // Replace with API call to fetch online users
         onlineUsers.value = [
-            { id: 1, name: 'Alice' },
-            { id: 2, name: 'Bob' },
-            { id: 3, name: 'Charlie' },
+            { id: 1, username: 'Alice', email: 'alice@mail.com' },
+            { id: 2, username: 'Bob', email: 'bob@mail.com' },
+            { id: 3, username: 'Charlie', email: 'charlie@mail.com' },
             // Add more users as needed
         ];
     };
@@ -50,14 +51,14 @@ export const useChatStore = defineStore('chat', () => {
             messages.value = [
                 // Sample messages
                 {
-                    sender: selectedUser.value?.name || 'User',
-                    receiver: userStore.user?.name || 'Me',
+                    sender: selectedUser.value?.username || 'User',
+                    receiver: userStore.user?.username || 'Me',
                     content: 'Hi there!',
                     timestamp: new Date().toISOString(),
                 },
                 {
-                    sender: userStore.user?.name || 'Me',
-                    receiver: selectedUser.value?.name,
+                    sender: userStore.user?.username || 'Me',
+                    receiver: selectedUser.value?.username,
                     content: 'Hello!',
                     timestamp: new Date().toISOString(),
                 },
@@ -76,8 +77,8 @@ export const useChatStore = defineStore('chat', () => {
 
     const sendMessage = (content: string) => {
         const message: Message = {
-            sender: userStore.user?.name || 'Me',
-            receiver: selectedUser.value?.name,
+            sender: userStore.user?.username || 'Me',
+            receiver: selectedUser.value?.username,
             content,
             timestamp: new Date().toISOString(),
         };
