@@ -3,6 +3,7 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { Channel } from 'phoenix';
 import { getSocket } from '@/services/socket';
+import { useUserStore } from './user';
 import api from '@/services/api';
 
 interface User {
@@ -26,43 +27,40 @@ export const useChatStore = defineStore('chat', () => {
 
     // Function to initialize the chat channel
     function initChannel() {
-        if (selectedUser.value) {
-            const socket = getSocket();
-            if (channel.value) {
-                channel.value.leave();
-            }
-            channel.value = socket.channel(`chat:${selectedUser.value.id}`, {});
+        const userStore = useUserStore();
+        const socket = getSocket();
 
-            channel.value.join()
-                .receive('ok', async () => {
-                    console.log('Joined chat channel successfully');
-                    await fetchMessages();
-                })
-                .receive('error', (resp) => {
-                    console.error('Unable to join chat channel', resp);
-                });
+        if (channel.value) {
+            channel.value.leave();
+        }
 
-            // Handle incoming messages
-            channel.value.on('message:new', (payload: Message) => {
-                messages.value.push(payload);
+        channel.value = socket.channel(`chat:user:${userStore.user?.id}`, {});
+
+        channel.value.join()
+            .receive('ok', async () => {
+                console.log('Joined personal chat channel successfully');
+            })
+            .receive('error', (resp) => {
+                console.error('Unable to join personal chat channel', resp);
             });
-        }
-    }
 
-    async function fetchMessages() {
-        try {
-            const response = await api.getMessages(selectedUser.value?.id || 0);
-            messages.value = response.data.messages;
-        } catch (error) {
-            console.error('Failed to fetch messages:', error);
-        }
+        // Handle incoming messages
+        channel.value.on('message:new', (payload: Message) => {
+            // Check if the message is from or to the selected user
+            if (
+                payload.sender_id === selectedUser.value?.id ||
+                payload.receiver_id === selectedUser.value?.id
+            ) {
+                messages.value.push(payload);
+            }
+        });
     }
 
     function sendMessage(content: string) {
-        if (channel.value) {
+        if (selectedUser.value && channel.value) {
             channel.value.push('message:new', {
                 content,
-                receiver_id: selectedUser.value?.id,
+                receiver_id: selectedUser.value.id.toString(),
             })
                 .receive('ok', (resp) => {
                     console.log('Message sent', resp);
@@ -83,6 +81,15 @@ export const useChatStore = defineStore('chat', () => {
         onlineUsers.value = users
     }
 
+    async function fetchMessages(receiverId: number) {
+        try {
+            const response = await api.getMessages(receiverId);
+            messages.value = response.data.messages;
+        } catch (error) {
+            console.error('Failed to fetch messages:', error);
+        }
+    }
+
     return {
         messages,
         onlineUsers,
@@ -90,5 +97,6 @@ export const useChatStore = defineStore('chat', () => {
         selectedUser,
         setSelectedUser,
         sendMessage,
+        fetchMessages
     };
 });

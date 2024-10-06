@@ -11,11 +11,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from 'vue'
+import { defineComponent, computed, onMounted, watch } from 'vue'
 import MessageBubble from '@/components/MessageBubble.vue'
 import { useUserStore } from '@/stores/user'
 import { useChatStore } from '@/stores/chat'
-import { useChat } from '@/composables/useChat'
 
 export default defineComponent({
   name: 'ChatWindow',
@@ -25,10 +24,22 @@ export default defineComponent({
   setup() {
     const userStore = useUserStore()
     const chatStore = useChatStore()
-    const receiverId = computed(() => chatStore.selectedUser?.id || 0)
 
-    // Use the chat composable
-    const { messages } = useChat(receiverId.value)
+    const selectedUserId = computed(() => chatStore.selectedUser?.id || 0)
+
+    const messages = computed(() => chatStore.messages)
+
+    watch(selectedUserId, (newUserId) => {
+      if (newUserId) {
+        chatStore.fetchMessages(newUserId) // Fetch messages from the API or socket
+      }
+    })
+
+    onMounted(() => {
+      if (selectedUserId.value) {
+        chatStore.fetchMessages(selectedUserId.value)
+      }
+    })
 
     return {
       messages,

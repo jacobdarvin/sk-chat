@@ -19,20 +19,16 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import { useChatStore } from '@/stores/chat'
-import { useChat } from '@/composables/useChat'
 
 export default defineComponent({
   name: 'MessageInput',
   setup() {
     const messageContent = ref('')
     const chatStore = useChatStore()
-    const receiverId = chatStore.selectedUser?.id || 0
-
-    const { sendMessage } = useChat(receiverId)
 
     const send = () => {
       if (messageContent.value.trim()) {
-        sendMessage(messageContent.value.trim())
+        chatStore.sendMessage(messageContent.value.trim())
         messageContent.value = ''
       }
     }
