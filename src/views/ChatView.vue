@@ -21,6 +21,7 @@ import ChatHeader from '@/components/ChatHeader.vue'
 import ChatWindow from '@/components/ChatWindow.vue'
 import UserList from '@/components/UserList.vue'
 import MessageInput from '@/components/MessageInput.vue'
+import { initializeChatService } from '@/services/chat'
 
 export default defineComponent({
   name: 'ChatView',
@@ -35,13 +36,12 @@ export default defineComponent({
 
     // Fetch online users and messages when the component is mounted
     onMounted(() => {
-      chatStore.fetchOnlineUsers()
-      chatStore.fetchMessages()
+      initializeChatService()
     })
 
     // Compute the header title based on the selected user
     const headerTitle = computed(() => {
-      return chatStore.selectedUser?.name || 'Group Chat'
+      return chatStore.selectedUser?.username || 'Group Chat'
     })
 
     return {

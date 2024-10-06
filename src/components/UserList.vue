@@ -15,7 +15,7 @@
         ]"
         @click="selectUser(user)"
       >
-        {{ user.name }}
+        {{ user.username }}
       </li>
     </ul>
   </div>
@@ -37,10 +37,8 @@ export default defineComponent({
     const selectedUserId = computed(() => chatStore.selectedUser?.id)
 
     // Function to handle user selection
-    const selectUser = (user: { id: number; name: string }) => {
+    const selectUser = (user: { id: number; username: string; email: string }) => {
       chatStore.setSelectedUser(user)
-      // Optionally, fetch the chat history with the selected user
-      chatStore.fetchMessages(user.id)
     }
 
     return {

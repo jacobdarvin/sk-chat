@@ -79,9 +79,14 @@ export const useChatStore = defineStore('chat', () => {
         initChannel();
     }
 
+    function setOnlineUsers(users: User[]) {
+        onlineUsers.value = users
+    }
+
     return {
         messages,
         onlineUsers,
+        setOnlineUsers,
         selectedUser,
         setSelectedUser,
         sendMessage,
