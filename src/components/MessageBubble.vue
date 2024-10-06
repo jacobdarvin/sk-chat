@@ -19,7 +19,8 @@ import { defineComponent } from 'vue'
 import type { PropType } from 'vue'
 
 interface Message {
-  sender: string
+  sender_id: number
+  receiver_id: number
   content: string
   timestamp: string
 }

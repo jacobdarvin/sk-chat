@@ -1,7 +1,8 @@
 // src/stores/chat.ts
 import { defineStore } from 'pinia';
-import { ref, computed } from 'vue';
-import { useUserStore } from './user';
+import { ref } from 'vue';
+import { Channel } from 'phoenix';
+import { getSocket } from '@/services/socket';
 import api from '@/services/api';
 
 interface User {
@@ -11,8 +12,8 @@ interface User {
 }
 
 interface Message {
-    sender: string;
-    receiver?: string;
+    sender_id: number;
+    receiver_id: number;
     content: string;
     timestamp: string;
 }
@@ -21,78 +22,68 @@ export const useChatStore = defineStore('chat', () => {
     const messages = ref<Message[]>([]);
     const onlineUsers = ref<User[]>([]);
     const selectedUser = ref<User | null>(null);
+    const channel = ref<Channel | null>(null);
 
-    const userStore = useUserStore();
+    // Function to initialize the chat channel
+    function initChannel() {
+        if (selectedUser.value) {
+            const socket = getSocket();
+            if (channel.value) {
+                channel.value.leave();
+            }
+            channel.value = socket.channel(`chat:${selectedUser.value.id}`, {});
 
-    const fetchOnlineUsers = async () => {
+            channel.value.join()
+                .receive('ok', async () => {
+                    console.log('Joined chat channel successfully');
+                    await fetchMessages();
+                })
+                .receive('error', (resp) => {
+                    console.error('Unable to join chat channel', resp);
+                });
+
+            // Handle incoming messages
+            channel.value.on('message:new', (payload: Message) => {
+                messages.value.push(payload);
+            });
+        }
+    }
+
+    async function fetchMessages() {
         try {
-            const response = await api.getOnlineUsers()
-            onlineUsers.value = response.data.users;
+            const response = await api.getMessages(selectedUser.value?.id || 0);
+            messages.value = response.data.messages;
         } catch (error) {
-            console.error('Failed to fetch online users:', error)
+            console.error('Failed to fetch messages:', error);
         }
-    };
+    }
 
-    const setSelectedUser = (user: User) => {
+    function sendMessage(content: string) {
+        if (channel.value) {
+            channel.value.push('message:new', {
+                content,
+                receiver_id: selectedUser.value?.id,
+            })
+                .receive('ok', (resp) => {
+                    console.log('Message sent', resp);
+                })
+                .receive('error', (resp) => {
+                    console.error('Failed to send message', resp);
+                });
+        }
+    }
+
+    function setSelectedUser(user: User) {
         selectedUser.value = user;
-        fetchMessages(user.id);
-    };
-
-    const selectedUserId = computed(() => selectedUser.value?.id || null);
-
-    const fetchMessages = (userId?: number) => {
-        // Clear existing messages
         messages.value = [];
-
-        // Replace with API call to fetch messages
-        if (userId) {
-            // Fetch messages with the selected user
-            messages.value = [
-                // Sample messages
-                {
-                    sender: selectedUser.value?.username || 'User',
-                    receiver: userStore.user?.username || 'Me',
-                    content: 'Hi there!',
-                    timestamp: new Date().toISOString(),
-                },
-                {
-                    sender: userStore.user?.username || 'Me',
-                    receiver: selectedUser.value?.username,
-                    content: 'Hello!',
-                    timestamp: new Date().toISOString(),
-                },
-            ];
-        } else {
-            // Fetch group chat messages
-            messages.value = [
-                {
-                    sender: 'System',
-                    content: 'Welcome to the group chat!',
-                    timestamp: new Date().toISOString(),
-                },
-            ];
-        }
-    };
-
-    const sendMessage = (content: string) => {
-        const message: Message = {
-            sender: userStore.user?.username || 'Me',
-            receiver: selectedUser.value?.username,
-            content,
-            timestamp: new Date().toISOString(),
-        };
-        messages.value.push(message);
-        // Send the message to the backend via API or WebSocket
-    };
+        initChannel();
+    }
 
     return {
         messages,
         onlineUsers,
         selectedUser,
-        selectedUserId,
-        fetchOnlineUsers,
         setSelectedUser,
-        fetchMessages,
         sendMessage,
     };
 });

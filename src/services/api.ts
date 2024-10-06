@@ -45,5 +45,9 @@ export default {
 
     getOnlineUsers() {
         return apiRequest('/users/online', 'GET', undefined, true)
-    }
+    },
+
+    getMessages(receiverId: number) {
+        return apiRequest(`/messages?receiver_id=${receiverId}`, 'GET', undefined, true);
+    },
 }

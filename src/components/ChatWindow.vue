@@ -1,19 +1,21 @@
+<!-- src/components/ChatWindow.vue -->
 <template>
   <div class="flex-grow overflow-y-auto p-4 bg-neutral-50">
     <MessageBubble
       v-for="(message, index) in messages"
       :key="index"
       :message="message"
-      :isMine="message.sender === userStore.user?.name"
+      :isMine="message.sender_id === userStore.user?.id"
     />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, watch } from 'vue'
+import { defineComponent, computed } from 'vue'
 import MessageBubble from '@/components/MessageBubble.vue'
 import { useUserStore } from '@/stores/user'
 import { useChatStore } from '@/stores/chat'
+import { useChat } from '@/composables/useChat'
 
 export default defineComponent({
   name: 'ChatWindow',
@@ -21,25 +23,17 @@ export default defineComponent({
     MessageBubble
   },
   setup() {
-    const chatStore = useChatStore()
     const userStore = useUserStore()
+    const chatStore = useChatStore()
+    const receiverId = computed(() => chatStore.selectedUser?.id || 0)
 
-    const messages = computed(() => chatStore.messages)
+    // Use the chat composable
+    const { messages } = useChat(receiverId.value)
 
-    // Watch for changes in the selected user
-    watch(
-      () => chatStore.selectedUser,
-      (newUser, oldUser) => {
-        if (newUser?.id !== oldUser?.id) {
-          chatStore.fetchMessages(newUser?.id)
-        }
-      },
-      { immediate: true }
-    )
-
-    return { messages, userStore }
+    return {
+      messages,
+      userStore
+    }
   }
 })
 </script>
-
-<style scoped></style>
