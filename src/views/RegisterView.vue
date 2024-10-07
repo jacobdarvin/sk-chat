@@ -32,7 +32,7 @@
         </button>
       </form>
       <p class="mt-2 underline">
-        <router-link to="/login">Have an account? Login here.</router-link>
+        <router-link to="/">Have an account? Login here.</router-link>
       </p>
     </div>
   </div>
