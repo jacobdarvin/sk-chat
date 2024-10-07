@@ -31,7 +31,7 @@ export default defineComponent({
 
     watch(selectedUserId, (newUserId) => {
       if (newUserId) {
-        chatStore.fetchMessages(newUserId) // Fetch messages from the API or socket
+        chatStore.fetchMessages(newUserId)
       }
     })
 
